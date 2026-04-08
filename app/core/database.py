@@ -1,4 +1,4 @@
-"""Database setup and session management for URL shortener app.
+"""Database setup and session management for URL shortener application.
 
 This module configures the SQLAlchemy engine, session factory, and provides the 
 `get_db` dependency used in FastAPI routes to inject a scoped database session.
