@@ -34,3 +34,18 @@ SessionLocal = sessionmaker(
 
 # Base class for SQLAlchemy models to inherit from.
 Base = declarative_base()
+
+def get_db():
+    """Yield a database session and ensure it is closed after use.
+
+    This is designed to be used as a FastAPI dependency, which provides
+    a DB session to path operation functions and guaranteed cleanup.
+
+    Yields:
+        Session: A SQLAlchemy session bound to the configuration engine
+    """
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close
