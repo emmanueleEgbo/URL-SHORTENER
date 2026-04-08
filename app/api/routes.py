@@ -1,6 +1,6 @@
 """FastAPI API for the URL shortener service.
 
-Exposes two endpoints:
+Exposes 2 endpoints:
 -  POST /shorten: accepts a long URL and returns a generated short code with the original URL.
 -  GET /{short_code}: Redirects the clients to the original long URL if the short code exists.
 """
