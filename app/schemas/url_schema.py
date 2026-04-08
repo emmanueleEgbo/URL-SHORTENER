@@ -1,7 +1,7 @@
 """Pydantic schemas for request/response validation in the URL shortener.
 
 These models define the shape of the data accepted by and returned from the API endpoints.
-They provide runtime validation and automatic docs for FastAPI.
+They provide runtime validation and automatic documentation for FastAPI.
 """
 
 from pydantic import BaseModel
