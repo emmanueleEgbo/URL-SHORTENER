@@ -10,3 +10,5 @@ Notes:
     - The engine and session here are synchronous. If you plan to migrate to asyn
     endpoints, use `sqlalchemy.ext.asyncio` and an async session pattern.
 """
+import os
+from sqlalchemy import create_engine
