@@ -47,3 +47,16 @@ def create_short_url_service(db: Session, long_url: str) -> URL:
     db.commit()
     db.refresh(new_url)
     return new_url
+
+
+def get_long_url_service(db: Session, short_code: str) -> Optional[URL]:
+    """Retrieve the stored URL mapping by its short code.
+
+    Args:
+        db: Active SQLAlchemy session.
+        short_code: The short code to look up.
+
+    Returns:
+        The `URL` instance if found, otherwise `None`.
+    """
+    return db.query(URL).filter(short_code==short_code).first()
