@@ -59,4 +59,4 @@ def get_long_url_service(db: Session, short_code: str) -> Optional[URL]:
     Returns:
         The `URL` instance if found, otherwise `None`.
     """
-    return db.query(URL).filter(short_code==short_code).first()
+    return db.query(URL).filter(URL.short_code==short_code).first()
