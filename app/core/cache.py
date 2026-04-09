@@ -14,5 +14,9 @@ async def init_redis():
     """Initialize Redis connection on app startup."""
     global redis
     redis = Redis(
-        host=os.get
+        host=REDIS_HOST,
+        port=REDIS_PORT,
+        db=REDIS_DB,
+        password=REDIS_PASSWORD,
+        decode_responses=True,
     )
