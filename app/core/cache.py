@@ -45,4 +45,3 @@ async def delete_cache(key: str):
     if not redis:
         raise RuntimeError("Redis not initialized.")
     await redis.delete(key)
-
