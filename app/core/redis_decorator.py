@@ -1,5 +1,6 @@
 import json
 from functools import wraps
+from app.models.url_model import URL
 
 from app.models import url_model
 from core.cache import get_cache, set_cache
@@ -20,3 +21,7 @@ def cache_response(key_func, ttl=300):
             await set_cache(key, json.dumps(encoded_result), ttl)
             return wrapper
         return decorator
+    
+
+def url_cache_key(url: URL, db: AsyncSession):
+    return f"url_shortcode:{url.short_code}"
