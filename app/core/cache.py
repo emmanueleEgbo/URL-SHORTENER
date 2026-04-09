@@ -20,3 +20,29 @@ async def init_redis():
         password=REDIS_PASSWORD,
         decode_responses=True,
     )
+
+
+async def close_redis():
+    """Close Redis connection on app shutdown"""
+    global redis
+    if redis:
+        await redis.close()
+    
+
+async def get_cache(key: str):
+    if not redis:
+        raise RuntimeError("Redis not initialized.")
+    return await redis.get(key)
+
+
+async def set_cache(key: str, value: str, ttl: int = 300):
+    if not redis:
+        raise RuntimeError("Redis not initialized.")
+    await redis.set(key, value, ex=ttl)
+
+
+async def delete_cache(key: str):
+    if not redis:
+        raise RuntimeError("Redis not initialized.")
+    await redis.delete(key)
+
