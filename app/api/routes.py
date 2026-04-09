@@ -14,13 +14,13 @@ from app.schemas.url_schema import URLCreate, URLResponse
 from app.services.url_service import create_short_url_service, get_long_url_service
 from fastapi.responses import RedirectResponse
 
-from core.redis_decorator import cache_response, url_cache_key
+from app.core.redis_decorator import cache_response, url_cache_key
 
 router = APIRouter()
 
 
 @router.post("/shorten", response_model=URLResponse)
-def create_short_url(p: URLCreate, db: AsyncSession = Depends(get_db)) -> URLResponse:
+async def create_short_url(p: URLCreate, db: AsyncSession = Depends(get_db)) -> URLResponse:
     """Create a short URL code for a provided long URL.
 
     Args:
@@ -30,13 +30,13 @@ def create_short_url(p: URLCreate, db: AsyncSession = Depends(get_db)) -> URLRes
         Returns:
             URLResponse: The persisted URL record containing the `short_code` and `long_url`.
     """
-    url = create_short_url_service(db, p.long_url)
+    url = await create_short_url_service(db, p.long_url)
     return url
 
 
 @router.get("/{short_code}")
 @cache_response(url_cache_key, ttl=300)
-def redirect_to_long_url(short_code: str, db: Session = Depends(get_db)):
+async def redirect_to_long_url(short_code: str, db: AsyncSession = Depends(get_db)):
     """Redirect to the original long URL for the given short code.
 
     Args:
@@ -49,7 +49,7 @@ def redirect_to_long_url(short_code: str, db: Session = Depends(get_db)):
     Returns:
         RedirectResponse: A 307 redirect to the original `long_url`.
     """
-    url = get_long_url_service(db, short_code)
+    url = await get_long_url_service(db, short_code)
     if not url:
         raise HTTPException(status_code=404, detail="URL not found")
     
