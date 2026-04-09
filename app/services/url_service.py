@@ -8,7 +8,9 @@ and models only.
 import random
 import string
 from typing import Optional
-from sqlalchemy.orm import Session
+# from sqlalchemy.orm import Session
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.url_model import URL
 
 def generate_short_code(length: int = 6) -> str:
@@ -26,7 +28,7 @@ def generate_short_code(length: int = 6) -> str:
     return "".join(random.choices(string.ascii_letters + string.digits, k=length))
 
 
-def create_short_url_service(db: Session, long_url: str) -> URL:
+async def create_short_url_service(db: AsyncSession, long_url: str) -> URL:
     """Create and persist a new URL mapping with a generated short code.
 
     Note:
@@ -44,12 +46,13 @@ def create_short_url_service(db: Session, long_url: str) -> URL:
     short_code = generate_short_code()
     new_url = URL(long_url=long_url, short_code=short_code)
     db.add(new_url)
-    db.commit()
-    db.refresh(new_url)
+    await db.commit()
+    await db.refresh(new_url)
+    
     return new_url
 
 
-def get_long_url_service(db: Session, short_code: str) -> Optional[URL]:
+async def get_long_url_service(db: AsyncSession, short_code: str) -> Optional[URL]:
     """Retrieve the stored URL mapping by its short code.
 
     Args:
@@ -59,4 +62,8 @@ def get_long_url_service(db: Session, short_code: str) -> Optional[URL]:
     Returns:
         The `URL` instance if found, otherwise `None`.
     """
-    return db.query(URL).filter(URL.short_code==short_code).first()
+    result = await db.execute(
+        select(URL).where(URL.short_code == short_code)
+    )
+    # return db.query(URL).filter(URL.short_code==short_code).first()
+    return result.scalar_one()

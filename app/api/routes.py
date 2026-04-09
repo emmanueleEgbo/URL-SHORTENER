@@ -6,8 +6,10 @@ Exposes two endpoints:
 """
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-from app.core.database import get_db
+#from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+#from app.core.database import get_db
+from app.core.async_database import get_db
 from app.schemas.url_schema import URLCreate, URLResponse
 from app.services.url_service import create_short_url_service, get_long_url_service
 from fastapi.responses import RedirectResponse
@@ -18,7 +20,7 @@ router = APIRouter()
 
 
 @router.post("/shorten", response_model=URLResponse)
-def create_short_url(p: URLCreate, db: Session = Depends(get_db)) -> URLResponse:
+def create_short_url(p: URLCreate, db: AsyncSession = Depends(get_db)) -> URLResponse:
     """Create a short URL code for a provided long URL.
 
     Args:
