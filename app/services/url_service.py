@@ -43,12 +43,24 @@ async def create_short_url_service(db: AsyncSession, long_url: str) -> URL:
     Returns:
         The persisted `URL` model instance.
     """
-    short_code = generate_short_code()
+    # Check if shortcode already exists in DB and prevent collision.
+    while True:
+        short_code = generate_short_code()
+
+        result = await db.execute(
+            select(URL).where(URL.short_code == short_code)
+        )
+        existing = result.scalar_one_or_none()
+
+        if not existing:
+            break
+
     new_url = URL(long_url=long_url, short_code=short_code)
+    
     db.add(new_url)
     await db.commit()
     await db.refresh(new_url)
-    
+
     return new_url
 
 
