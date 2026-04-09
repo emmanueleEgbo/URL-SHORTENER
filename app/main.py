@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.api.routes import router
 from app.core.database import engine, Base
+from redis.asyncio import Redis
 
 Base.metadata.create_all(bind=engine)
 
