@@ -12,6 +12,8 @@ from app.schemas.url_schema import URLCreate, URLResponse
 from app.services.url_service import create_short_url_service, get_long_url_service
 from fastapi.responses import RedirectResponse
 
+from core.redis_decorator import cache_response, url_cache_key
+
 router = APIRouter()
 
 
@@ -31,6 +33,7 @@ def create_short_url(p: URLCreate, db: Session = Depends(get_db)) -> URLResponse
 
 
 @router.get("/{short_code}")
+@cache_response(url_cache_key, ttl=300)
 def redirect_to_long_url(short_code: str, db: Session = Depends(get_db)):
     """Redirect to the original long URL for the given short code.
 
