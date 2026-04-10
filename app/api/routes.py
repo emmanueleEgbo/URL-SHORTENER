@@ -20,11 +20,15 @@ from app.models.url_model import URL
 router = APIRouter()
 
 
-@router.get("/urls", response_model=List[PaginatedResponse])
+@router.get("/urls", response_model=PaginatedResponse)
 async def get_urls(db: AsyncSession = Depends(get_db)):
     print("URLS ROUTE TRIGGERED!")
     print("URLs:", await get_urls_service(db))
-    return await get_urls_service(db)
+    urls = await get_urls_service(db)
+
+    return {
+        "data": [URLResponse.model_validate(u) for u in urls],
+    }
 
 
 @router.post("/shorten", response_model=URLResponse)

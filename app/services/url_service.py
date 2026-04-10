@@ -81,6 +81,6 @@ async def get_long_url_service(db: AsyncSession, short_code: str) -> Optional[UR
     return result.scalar_one_or_none()
 
 
-async def get_urls_service(db: AsyncSession) -> List[URL]:
+async def get_urls_service(db: AsyncSession):
     result = await db.execute(select(URL))
     return result.scalars().all()

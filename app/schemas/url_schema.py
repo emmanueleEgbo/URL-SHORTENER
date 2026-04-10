@@ -25,7 +25,7 @@ class URLResponse(BaseModel):
     """
 
     short_code: str
-    long_url: str
+    long_url: HttpUrl
 
     class Config:
         # Allow creating this scheme directly from ORM objects (e.g., SQLAlchemy models)
