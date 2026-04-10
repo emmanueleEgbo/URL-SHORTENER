@@ -4,7 +4,8 @@ These models define the shape of the data accepted by and returned from the API 
 They provide runtime validation and automatic documentation for FastAPI.
 """
 
-from pydantic import BaseModel
+from typing import List
+from pydantic import BaseModel, HttpUrl
 
 class URLCreate(BaseModel):
     """Payload for creating a short URL.
@@ -29,3 +30,6 @@ class URLResponse(BaseModel):
     class Config:
         # Allow creating this scheme directly from ORM objects (e.g., SQLAlchemy models)
         from_attributes=True
+
+class PaginatedResponse(BaseModel):
+    data: List[URLResponse]

@@ -4,6 +4,7 @@ from app.api.routes import router
 from app.core.async_database import async_engine, Base
 from app.core.cache_utilities import close_redis, init_redis
 
+
 # Connect redis to our FastAPI app lifecycle so it can start and close properly authomatically
 async def lifespan(app: FastAPI):
     async with async_engine.begin() as conn:
