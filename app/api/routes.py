@@ -13,7 +13,6 @@ from app.core.async_database import get_db
 from app.schemas.url_schema import URLCreate, URLResponse
 from app.services.url_service import create_short_url_service, get_long_url_service
 from fastapi.responses import RedirectResponse
-
 from app.core.redis_decorator import cache_response, url_cache_key
 
 router = APIRouter()
@@ -55,3 +54,8 @@ async def redirect_to_long_url(short_code: str, db: AsyncSession = Depends(get_d
     
     # Use Starlette's RedirectResponse to send the client to the original URL.
     return RedirectResponse(url=url.long_url)
+
+
+@router.get("/urls")
+async def get_urls(urls: URL):
+    pass
