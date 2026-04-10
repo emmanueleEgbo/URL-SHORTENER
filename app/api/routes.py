@@ -63,4 +63,4 @@ async def get_urls(db: AsyncSession = Depends(get_db)):
     if not urls:
         raise HTTPException(status_code=404, detail="No URLs found")
     
-    return urls
+    return {"urls": urls}

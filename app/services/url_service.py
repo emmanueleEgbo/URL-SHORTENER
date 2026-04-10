@@ -7,7 +7,7 @@ and models only.
 
 import random
 import string
-from typing import Optional
+from typing import Optional, List
 # from sqlalchemy.orm import Session
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -78,10 +78,9 @@ async def get_long_url_service(db: AsyncSession, short_code: str) -> Optional[UR
         select(URL).where(URL.short_code == short_code)
     )
     # return db.query(URL).filter(URL.short_code==short_code).first()
-    return result.scalar_one()
+    return result.scalar_one_or_none()
 
 
-async def get_urls_service(db: AsyncSession) -> Optional[URL]:
+async def get_urls_service(db: AsyncSession) -> List[URL]:
     result = await db.execute(select(URL))
-    urls = result.scalars().all()
-    return urls
+    return result.scalars().all()
