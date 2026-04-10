@@ -79,3 +79,9 @@ async def get_long_url_service(db: AsyncSession, short_code: str) -> Optional[UR
     )
     # return db.query(URL).filter(URL.short_code==short_code).first()
     return result.scalar_one()
+
+
+async def get_urls_service(db: AsyncSession) -> Optional[URL]:
+    result = await db.execute(select(URL))
+    urls = result.scalars().all()
+    return urls
