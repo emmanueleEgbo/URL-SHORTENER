@@ -14,6 +14,7 @@ from app.schemas.url_schema import URLCreate, URLResponse
 from app.services.url_service import create_short_url_service, get_long_url_service
 from fastapi.responses import RedirectResponse
 from app.core.redis_decorator import cache_response, url_cache_key
+from app.models.url_model import URL
 
 router = APIRouter()
 
