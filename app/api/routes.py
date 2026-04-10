@@ -11,7 +11,7 @@ from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 #from app.core.database import get_db
 from app.core.async_database import get_db
-from app.schemas.url_schema import URLCreate, URLResponse
+from app.schemas.url_schema import URLCreate, URLResponse, PaginatedResponse
 from app.services.url_service import create_short_url_service, get_long_url_service, get_urls_service
 from fastapi.responses import RedirectResponse
 from app.core.redis_decorator import cache_response, url_cache_key
@@ -20,7 +20,7 @@ from app.models.url_model import URL
 router = APIRouter()
 
 
-@router.get("/urls", response_model=List[URLResponse])
+@router.get("/urls", response_model=List[PaginatedResponse])
 async def get_urls(db: AsyncSession = Depends(get_db)):
     print("URLS ROUTE TRIGGERED!")
     print("URLs:", await get_urls_service(db))
