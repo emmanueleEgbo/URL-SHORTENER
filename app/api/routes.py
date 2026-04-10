@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 #from app.core.database import get_db
 from app.core.async_database import get_db
 from app.schemas.url_schema import URLCreate, URLResponse
-from app.services.url_service import create_short_url_service, get_long_url_service
+from app.services.url_service import create_short_url_service, get_long_url_service, get_urls_service
 from fastapi.responses import RedirectResponse
 from app.core.redis_decorator import cache_response, url_cache_key
 from app.models.url_model import URL
@@ -58,5 +58,9 @@ async def redirect_to_long_url(short_code: str, db: AsyncSession = Depends(get_d
 
 
 @router.get("/urls")
-async def get_urls(urls: URL):
-    pass
+async def get_urls(db: AsyncSession = Depends(get_db)):
+    urls = await get_urls(db)
+    if not urls:
+        raise HTTPException(status_code=404, detail="No URLs found")
+    
+    return urls
