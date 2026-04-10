@@ -60,22 +60,4 @@ async def redirect_to_long_url(short_code: str, db: AsyncSession = Depends(get_d
 
 @router.get("/urls", response_model=List[URLResponse])
 async def get_urls(db: AsyncSession = Depends(get_db)):
-    urls = await get_urls_service(db)
-    if not urls:
-        raise HTTPException(status_code=404, detail="No URLs found")
-    
-    return {"urls": urls}
-
-"""
-{
-  "data": [
-    {...},
-    {...}
-  ],
-  "meta": {
-    "total": 100,
-    "page": 1,
-    "page_size": 10
-  }
-}
-"""
+    return await get_urls_service(db)
