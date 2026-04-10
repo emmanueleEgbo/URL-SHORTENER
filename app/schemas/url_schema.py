@@ -13,7 +13,7 @@ class URLCreate(BaseModel):
     Attributes:
         long_url: The original URL to shorten
     """
-    long_url: str
+    long_url: HttpUrl
 
 
 class URLResponse(BaseModel):
