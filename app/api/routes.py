@@ -20,17 +20,6 @@ from app.models.url_model import URL
 router = APIRouter()
 
 
-@router.get("/urls", response_model=PaginatedResponse)
-async def get_urls(db: AsyncSession = Depends(get_db)):
-    print("URLS ROUTE TRIGGERED!")
-    print("URLs:", await get_urls_service(db))
-    urls = await get_urls_service(db)
-
-    return {
-        "data": [URLResponse.model_validate(u) for u in urls],
-    }
-
-
 @router.post("/shorten", response_model=URLResponse)
 async def create_short_url(p: URLCreate, db: AsyncSession = Depends(get_db)) -> URLResponse:
     """Create a short URL code for a provided long URL.
@@ -67,3 +56,14 @@ async def redirect_to_long_url(short_code: str, db: AsyncSession = Depends(get_d
     
     # Use Starlette's RedirectResponse to send the client to the original URL.
     return RedirectResponse(url=url.long_url)
+
+
+@router.get("/urls", response_model=PaginatedResponse)
+async def get_urls(db: AsyncSession = Depends(get_db)):
+    print("URLS ROUTE TRIGGERED!")
+    print("URLs:", await get_urls_service(db))
+    urls = await get_urls_service(db)
+
+    return {
+        "data": [URLResponse.model_validate(u) for u in urls],
+    }
