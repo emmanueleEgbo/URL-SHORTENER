@@ -21,8 +21,15 @@ router = APIRouter()
 
 @router.get("/urls", response_model=PaginatedResponse)
 async def get_urls(db: AsyncSession = Depends(get_db)):
-    print("URLS ROUTE TRIGGERED!")
-    print("URLs:", await get_urls_service(db))
+    """Retrieve all stored URLs.
+
+    Args:
+        db: SQLAlchemy asynchronous database session dependency.
+
+    Returns:
+        PaginatedResponse: A response object containing a list of URL instances,
+        where each instance includes the `short_code` and `long_url`.
+    """
     urls = await get_urls_service(db)
 
     return {
