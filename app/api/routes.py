@@ -3,7 +3,7 @@
 Exposes three endpoints:
 -  POST /shorten: accepts a long URL and returns a generated short code with the original URL.
 -  GET /{short_code}: Redirects the clients to the original long URL if the short code exists.
--  GET /urls: Retrieves a list of stored URL model instances representing such that their short codes and original URLs are retrived alongside.
+-  GET /urls: Retrieves a list of stored URL model instances, each including the short_code and long_url.
 """
 
 from fastapi import APIRouter, Depends, HTTPException
