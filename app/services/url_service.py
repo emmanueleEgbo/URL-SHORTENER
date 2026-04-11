@@ -82,5 +82,17 @@ async def get_long_url_service(db: AsyncSession, short_code: str) -> Optional[UR
 
 
 async def get_urls_service(db: AsyncSession):
+    """Retrieve all URL records from the database.
+
+    Executes an asynchronous query to fetch all entries from the URL table.
+    Returns a list of ORM model instances. For large datasets, consider
+    adding pagination to avoid performance issues.
+
+    Args:
+        db: Async SQLAlchemy session used to interact with the database.
+
+    Returns:
+        A list of URL model instances representing all stored URLs.
+    """
     result = await db.execute(select(URL))
     return result.scalars().all()
