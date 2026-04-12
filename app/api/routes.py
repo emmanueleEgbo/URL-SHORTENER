@@ -18,7 +18,7 @@ from fastapi.responses import RedirectResponse
 from app.core.redis_decorator import cache_response, url_cache_key
 from app.models.url_model import URL
 
-router = APIRouter()
+router = APIRouter(prefix="/v1")
 
 @router.get("/urls", response_model=PaginatedResponse)
 async def get_urls(db: AsyncSession = Depends(get_db)):
