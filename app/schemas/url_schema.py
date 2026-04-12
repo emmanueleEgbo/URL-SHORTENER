@@ -28,7 +28,7 @@ class URLResponse(BaseModel):
     long_url: HttpUrl
 
     class Config:
-        # Allow creating this scheme directly from ORM objects (e.g., SQLAlchemy models)
+        # Allow creating this schema directly from ORM objects (e.g., SQLAlchemy models)
         from_attributes=True
 
 class PaginatedResponse(BaseModel):
