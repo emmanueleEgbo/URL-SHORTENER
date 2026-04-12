@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.api.routes import router
+from app.api.v1.routes import v1_router
 #from app.core.database import engine, Base
 from app.core.async_database import async_engine, Base
 from app.core.cache_utilities import close_redis, init_redis
@@ -22,7 +22,7 @@ app = FastAPI(lifespan=lifespan)
 
 
 # Include the routes
-app.include_router(router)
+app.include_router(v1_router)
 
 # Liveliness / health check endpoint
 @app.get("/")
