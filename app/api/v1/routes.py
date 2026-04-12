@@ -18,9 +18,9 @@ from fastapi.responses import RedirectResponse
 from app.core.redis_decorator import cache_response, url_cache_key
 from app.models.url_model import URL
 
-router = APIRouter(prefix="/v1", tags=["v1"])
+v1_router = APIRouter(prefix="/v1", tags=["v1"])
 
-@router.get("/urls", response_model=PaginatedResponse)
+@v1_router.get("/urls", response_model=PaginatedResponse)
 async def get_urls(db: AsyncSession = Depends(get_db)):
     """Retrieve all stored URLs.
 
@@ -38,7 +38,7 @@ async def get_urls(db: AsyncSession = Depends(get_db)):
     }
 
 
-@router.post("/shorten", response_model=URLResponse)
+@v1_router.post("/shorten", response_model=URLResponse)
 async def create_short_url(p: URLCreate, db: AsyncSession = Depends(get_db)) -> URLResponse:
     """Create a short URL code for a provided long URL.
 
@@ -53,7 +53,7 @@ async def create_short_url(p: URLCreate, db: AsyncSession = Depends(get_db)) -> 
     return url
 
 
-@router.get("/{short_code}")
+@v1_router.get("/{short_code}")
 @cache_response(url_cache_key, ttl=300)
 async def redirect_to_long_url(short_code: str, db: AsyncSession = Depends(get_db)):
     """Redirect to the original long URL for the given short code.
