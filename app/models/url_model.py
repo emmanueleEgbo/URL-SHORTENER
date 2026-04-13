@@ -21,4 +21,4 @@ class URL(Base):
     long_url = Column(String, nullable=False, unique=True)
 
     # Unique short code for quick lookup
-    short_code = Column(String, unique=True, index=True)
+    short_code = Column(String, index=True)
