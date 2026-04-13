@@ -8,6 +8,7 @@ from app.models.url_model import URL
 
 # Connect redis to our FastAPI app lifecycle so it can start and close properly authomatically
 async def lifespan(app: FastAPI):
+    print(Base.metadata.tables.keys())
     async with async_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
