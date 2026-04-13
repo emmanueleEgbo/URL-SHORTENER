@@ -3,6 +3,7 @@ from app.api.v1.routes import v1_router
 #from app.core.database import engine, Base
 from app.core.async_database import async_engine, Base
 from app.core.cache_utilities import close_redis, init_redis
+from app.models.url_model import URL
 
 
 # Connect redis to our FastAPI app lifecycle so it can start and close properly authomatically
