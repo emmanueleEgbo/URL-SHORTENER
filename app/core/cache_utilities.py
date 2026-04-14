@@ -30,6 +30,21 @@ async def close_redis():
     
 
 async def get_cache(key: str):
+    """Retrieve a value from Redis cache by key.
+
+    Performs an asynchronous lookup in Redis for the given key. If Redis
+    is not initialized, raises an error to prevent silent failures.
+
+    Args:
+        key: The cache key to retrieve the value for.
+
+    Returns:
+        The cached value associated with the key, or None if the key
+        does not exist in the cache.
+
+    Raises:
+        RuntimeError: If the Redis client has not been initialized.
+    """
     if not redis:
         raise RuntimeError("Redis not initialized.")
     return await redis.get(key)
