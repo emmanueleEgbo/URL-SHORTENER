@@ -51,6 +51,23 @@ async def get_cache(key: str):
 
 
 async def set_cache(key: str, value: str, ttl: int = 300):
+    """Store a value in Redis cache with an optional expiration time.
+
+    Performs an asynchronous write to Redis, associating the given key
+    with the provided value. A time-to-live (TTL) can be set to ensure
+    the cached data expires automatically.
+
+    Args:
+        key: The cache key under which the value will be stored.
+        value: The value to store in the cache.
+        ttl: Time-to-live in seconds before the key expires (default: 300).
+
+    Returns:
+        None.
+
+    Raises:
+        RuntimeError: If the Redis client has not been initialized.
+    """
     if not redis:
         raise RuntimeError("Redis not initialized.")
     await redis.set(key, value, ex=ttl)
