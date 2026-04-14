@@ -48,4 +48,15 @@ def cache_response(key_func, ttl=300):
     
 
 def url_cache_key(short_code: str, **kwargs):
+    """Generate a Redis cache key for URL short code lookups.
+
+    Creates a namespaced cache key using the provided short code.
+    This helps avoid key collisions and keeps cache entries organized.
+
+    Args:
+        short_code: The short code associated with the URL.
+
+    Returns:
+        A string representing the Redis cache key.
+    """
     return f"url_shortcode:{short_code}"
