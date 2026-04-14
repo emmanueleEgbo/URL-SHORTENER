@@ -74,6 +74,20 @@ async def set_cache(key: str, value: str, ttl: int = 300):
 
 
 async def delete_cache(key: str):
+    """Delete a value from Redis cache by key.
+
+    Performs an asynchronous deletion of the specified key from Redis.
+    If the key does not exist, the operation completes silently.
+
+    Args:
+        key: The cache key to delete.
+
+    Returns:
+        None.
+
+    Raises:
+        RuntimeError: If the Redis client has not been initialized.
+    """
     if not redis:
         raise RuntimeError("Redis not initialized.")
     await redis.delete(key)
