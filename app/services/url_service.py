@@ -44,7 +44,10 @@ async def create_short_url_service(db: AsyncSession, long_url: str) -> URL:
         The persisted `URL` model instance.
     """
     # Check if shortcode already exists in DB and prevent collision.
-    while True:
+    max_attempts = 10
+    attempts = 0
+
+    while attempts < max_attempts:
         short_code = generate_short_code()
 
         result = await db.execute(
@@ -54,6 +57,11 @@ async def create_short_url_service(db: AsyncSession, long_url: str) -> URL:
 
         if not existing:
             break
+
+        attempts += 1
+    
+    else:
+        raise Exception("Failed to generate unique short code.")
 
     new_url = URL(long_url=long_url, short_code=short_code)
     
