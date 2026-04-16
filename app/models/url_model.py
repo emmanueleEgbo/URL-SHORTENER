@@ -1,7 +1,8 @@
 """SQLAlchemy ORM models for the URL shortener application."""
 
 from sqlalchemy import Column, Integer, String
-from app.core.database import Base
+# from app.core.database import Base
+from app.core.async_database import Base
 
 
 class URL(Base):

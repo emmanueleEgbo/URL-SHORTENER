@@ -33,7 +33,7 @@ SessionLocal = sessionmaker(
 )
 
 # Base class for SQLAlchemy models to inherit from.
-Base = declarative_base()
+# Base = declarative_base()
 
 def get_db():
     """Yield a database session and ensure it is closed after use.
