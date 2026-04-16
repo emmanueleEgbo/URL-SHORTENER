@@ -9,7 +9,7 @@ load_dotenv()
 # Connection string for the async database
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-async_engine = create_async_engine(DATABASE_URL, echo=True)
+async_engine = create_async_engine(DATABASE_URL, echo=False)
 
 # Async session factory
 AsyncSessionLocal = async_sessionmaker(
