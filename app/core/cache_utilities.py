@@ -2,6 +2,8 @@ import os
 from redis.asyncio import Redis
 from app.core.config import settings
 
+redis = None
+
 async def init_redis():
     """Initialize Redis connection on app startup."""
     global redis

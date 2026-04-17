@@ -3,14 +3,10 @@ from sqlalchemy.engine import URL
 
 
 class Settings(BaseSettings):
-    redis_host: str
-    redis_port: int
-    redis_db: int
-    redis_password: str
-
-    @property
-    def db_url(self):
-        pass
+    redis_host: str = "localhost"
+    redis_port: int = 6379
+    redis_db: int = 0
+    redis_password: str | None
 
     model_config = SettingsConfigDict(env_file=".env")
 
