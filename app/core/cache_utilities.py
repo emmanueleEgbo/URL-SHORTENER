@@ -71,8 +71,8 @@ async def set_cache(key: str, value: str, ttl: int = 300):
     Raises:
         RuntimeError: If the Redis client has not been initialized.
     """
-    if not redis:
-        raise RuntimeError("Redis not initialized.")
+    if redis is None:
+        return
     await redis.set(key, value, ex=ttl)
 
 
@@ -91,6 +91,6 @@ async def delete_cache(key: str):
     Raises:
         RuntimeError: If the Redis client has not been initialized.
     """
-    if not redis:
-        raise RuntimeError("Redis not initialized.")
+    if redis is None:
+        return
     await redis.delete(key)
