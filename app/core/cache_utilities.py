@@ -1,6 +1,7 @@
 import os
 from redis.asyncio import Redis
 from app.core.config import settings
+import logging
 
 redis = None
 
@@ -16,8 +17,11 @@ async def init_redis():
         password=settings.redis_password,
         decode_responses=True,
         )
+
+        await redis.ping() # verify connection
+        logging.info("REDIS CONNECTED")
     except Exception:
-        print("Redis not available")
+        logging.info("Redis not available")
         redis = None
 
 
@@ -44,8 +48,8 @@ async def get_cache(key: str):
     Raises:
         RuntimeError: If the Redis client has not been initialized.
     """
-    if not redis:
-        raise RuntimeError("Redis not initialized.")
+    if redis is None:
+        return None
     return await redis.get(key)
 
 
