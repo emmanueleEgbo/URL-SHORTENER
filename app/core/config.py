@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     redis_db: int = 0
     redis_password: str | None
 
+    database_url: str
+
     model_config = SettingsConfigDict(env_file=".env")
 
 
