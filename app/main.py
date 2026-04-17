@@ -19,8 +19,7 @@ async def lifespan(app: FastAPI):
     
     await close_redis()
     logging.info("REDIS CLOSED")
-
-# Base.metadata.create_all(bind=async_engine)
+    
 
 app = FastAPI(lifespan=lifespan)
 
