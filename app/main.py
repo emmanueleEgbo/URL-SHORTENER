@@ -13,10 +13,12 @@ async def lifespan(app: FastAPI):
         await conn.run_sync(Base.metadata.create_all)
 
     await init_redis()
+    logging.info("REDIS INITIALIZED")
 
     yield
     
     await close_redis()
+    logging.info("REDIS CLOSED")
 
 # Base.metadata.create_all(bind=async_engine)
 
