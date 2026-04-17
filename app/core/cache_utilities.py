@@ -1,14 +1,6 @@
 import os
-from dotenv import load_dotenv
 from redis.asyncio import Redis
-
-# Load environment variables from .env
-load_dotenv()
-
-REDIS_HOST=os.getenv("REDIS_HOST")
-REDIS_PORT=os.getenv("REDIS_PORT")
-REDIS_DB=os.getenv("REDIS_DB")
-REDIS_PASSWORD=os.getenv("REDIS_PASSWORD")
+from app.core.config import settings
 
 async def init_redis():
     """Initialize Redis connection on app startup."""
@@ -16,10 +8,10 @@ async def init_redis():
 
     try:
         redis = Redis(
-        host=REDIS_HOST,
-        port=REDIS_PORT,
-        db=REDIS_DB,
-        password=REDIS_PASSWORD,
+        host=settings.redis_host,
+        port=settings.redis_port,
+        db=settings.redis_db,
+        password=settings.redis_password,
         decode_responses=True,
         )
     except Exception:
