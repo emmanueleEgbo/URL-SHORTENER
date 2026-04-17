@@ -20,6 +20,7 @@ from app.models.url_model import URL
 
 v1_router = APIRouter(prefix="/v1", tags=["v1"])
 
+
 @v1_router.get("/urls", response_model=PaginatedResponse)
 async def get_urls(db: AsyncSession = Depends(get_db)):
     """Retrieve all stored URLs.

@@ -13,13 +13,18 @@ REDIS_PASSWORD=os.getenv("REDIS_PASSWORD")
 async def init_redis():
     """Initialize Redis connection on app startup."""
     global redis
-    redis = Redis(
+
+    try:
+        redis = Redis(
         host=REDIS_HOST,
         port=REDIS_PORT,
         db=REDIS_DB,
         password=REDIS_PASSWORD,
         decode_responses=True,
-    )
+        )
+    except Exception:
+        print("Redis not available")
+        redis = None
 
 
 async def close_redis():
