@@ -8,7 +8,6 @@ and models only.
 import random
 import string
 from typing import Optional, List
-# from sqlalchemy.orm import Session
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.url_model import URL
