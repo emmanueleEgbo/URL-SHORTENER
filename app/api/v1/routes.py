@@ -1,6 +1,6 @@
 """FastAPI API for the URL shortener service.
 
-Exposes three endpoints:
+Exposes three asynchronous endpoints:
 -  POST /shorten: accepts a long URL and returns a generated short code with the original URL.
 -  GET /{short_code}: Redirects the clients to the original long URL if the short code exists.
 -  GET /urls: Retrieves a list of stored URL model instances, each including the short_code and long_url.
@@ -8,9 +8,7 @@ Exposes three endpoints:
 
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
-#from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
-#from app.core.database import get_db
 from app.core.async_database import get_db
 from app.schemas.url_schema import URLCreate, URLResponse, PaginatedResponse
 from app.services.url_service import create_short_url_service, get_long_url_service, get_urls_service
