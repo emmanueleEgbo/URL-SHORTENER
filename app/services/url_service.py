@@ -45,6 +45,7 @@ async def create_short_url_service(db: AsyncSession, long_url: str) -> URL:
     # Check if shortcode already exists in DB and prevent collision.
     max_attempts = 10
     attempts = 0
+    short_code = ""
 
     while attempts < max_attempts:
         short_code = generate_short_code()
