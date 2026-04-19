@@ -28,7 +28,7 @@ def generate_short_code(length: int = 6) -> str:
 
 
 async def create_short_url_service(db: AsyncSession, long_url: str) -> URL:
-    """Create and persist a new URL mapping with a generated short code.
+    """Create or return an existing short URL mapping.
 
     Note:
         This implementation does not currently check for collisions. For a
