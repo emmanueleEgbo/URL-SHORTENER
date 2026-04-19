@@ -10,6 +10,7 @@ import string
 from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import IntegrityError
 from app.models.url_model import URL
 
 def generate_short_code(length: int = 6) -> str:
@@ -73,9 +74,17 @@ async def create_short_url_service(db: AsyncSession, long_url: str) -> URL:
     new_url = URL(long_url=long_url, short_code=short_code)
     
     db.add(new_url)
-    await db.commit()
-    await db.refresh(new_url)
 
+    try:
+        await db.commit()
+    except IntegrityError:
+        # Handle race condition where another request inserted same long_url
+        await db.rollback()
+
+        result = await db.execute(select(URL).where(URL.long_url == long_url))
+        return result.scalar_one()
+    
+    await db.refresh(new_url)
     return new_url
 
 
