@@ -30,6 +30,10 @@ def generate_short_code(length: int = 6) -> str:
 
 async def create_short_url_service(db: AsyncSession, long_url: str) -> URL:
     """Create or return an existing short URL mapping.
+    This function first checks whether the given `long_url` already exists
+    in the database. If it does, the existing `URL` record is returned,
+    ensuring idempotent behavior (the same long URL always maps to the same
+    short code).
 
     Note:
         This implementation does not currently check for collisions. For a
