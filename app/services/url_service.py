@@ -35,17 +35,21 @@ async def create_short_url_service(db: AsyncSession, long_url: str) -> URL:
     ensuring idempotent behavior (the same long URL always maps to the same
     short code).
 
+    If the URL does not exist, a new unique short code is generated and a
+    new record is created and persisted.
+
     Note:
-        This implementation does not currently check for collisions. For a
-        production system, add a retry loop to regenerate the code when a
-        uniqueness constraint violation occurs.
+        - A retry loop is used to reduce the risk of short code collisions.
+        - A database uniqueness constraint on `long_url` is relied upon to
+        handle race conditions. In the event of a concurrent insert, the
+        transaction is rolled back and the existing record is fetched.
 
     Args:
-        db: Active SQLAlchemy session.
+        db: Active SQLAlchemy async session.
         long_url: The original URL to be shorten
 
     Returns:
-        The persisted `URL` model instance.
+        The existing or newly created `URL` model instance.
     """
 
     # Check if long_url already exists and return it
