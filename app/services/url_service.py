@@ -41,7 +41,7 @@ async def create_short_url_service(db: AsyncSession, long_url: str) -> URL:
     Note:
         - A retry loop is used to reduce the risk of short code collisions.
         - A database uniqueness constraint on `long_url` is relied upon to
-        handle race conditions. In the event of a concurrent insert, the
+        handle race conditions. In the event of a concurrent insert (race condition), the
         transaction is rolled back and the existing record is fetched.
 
     Args:
