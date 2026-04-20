@@ -52,9 +52,9 @@ async def create_short_url_service(db: AsyncSession, long_url: str) -> URL:
         The existing or newly created `URL` model instance.
     """
 
-    # Check if long_url already exists and return it
+    # Check if long_url already exists and return it ensuring Indempotency
     result = await db.execute(select(URL).where(URL.long_url == long_url))
-    existing_long_url = result.scalar_one_or_none()
+    existing_long_url = result.scalar_one_or_none
 
     if existing_long_url:
         return existing_long_url # Return existing mapping immediately
@@ -82,7 +82,7 @@ async def create_short_url_service(db: AsyncSession, long_url: str) -> URL:
     new_url = URL(long_url=long_url, short_code=short_code)
     
     db.add(new_url)
-
+    
     try:
         await db.commit()
     except IntegrityError:

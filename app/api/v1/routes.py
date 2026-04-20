@@ -68,7 +68,8 @@ async def redirect_to_long_url(short_code: str, db: AsyncSession = Depends(get_d
         RedirectResponse: A 307 redirect to the original `long_url`.
     """
     url = await get_long_url_service(db, short_code)
-    if not url:
+    # if not url:
+    if url is None:
         raise HTTPException(status_code=404, detail="URL not found")
     
     # Use Starlette's RedirectResponse to send the client to the original URL.
