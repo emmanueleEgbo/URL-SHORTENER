@@ -81,5 +81,7 @@ docker-compose.override.yml
 __pypackages__/
 .pdm-*
 
+# Other files
+definitions.md
 # ---- Framework specific (FastAPI/Starlette has none by default) ----
 # Add framework-specific ignores below if introduced later
