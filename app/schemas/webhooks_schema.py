@@ -14,3 +14,16 @@ class WebhookCreate(BaseModel):
     name: str
     url: str
     event: List[WebhookEvent]
+
+
+class WebhookResponse(BaseModel):
+    id: int
+    name: str
+    url: str
+    events: List[str]
+    is_active: bool
+    created_at: datetime
+
+    class Config:
+        # Allow creating this schema directly from ORM objects (e.g., SQLAlchemy models)
+        from_attributes=True
