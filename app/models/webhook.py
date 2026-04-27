@@ -9,7 +9,7 @@ class Webhook(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=True)
     url = Column(String, nullable=False)
-    # e.g. ["url.created", "url.clicked", "url.deleted"]
+    # e.g. ["url.created", "url.click", "url.deleted"]
     events = Column(JSON, nullable=False, default=list)
     is_active = Column(Boolean, default=True, nullable=False)
     created_at = Column(
