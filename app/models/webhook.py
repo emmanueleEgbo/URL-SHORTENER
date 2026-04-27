@@ -4,7 +4,7 @@ from app.core.async_database import Base
 
 
 class Webhook(Base):
-    __tablename__="webhooks"
+    __tablename__="webhook"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=True)
