@@ -37,4 +37,9 @@ def _build_payment(event: str, data: dict) -> dict:
 
 
 async def _deliver(webhook: Webhook, payload: dict) -> None:
-    pass
+    """POST the payload to a single webhook URL. Errors are logged, never raised."""
+    headers = {
+        "Content-Type": "application/json",
+        "X-Webhook-Event": payload["event"],
+        "User-Agent": "URLShortener-Webhook/1.0",
+    }
