@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 # Internal helper functions
 # --------------------------------------------
 
-def _build_payment(event: str, data: dict) -> dict:
+def _build_payload(event: str, data: dict) -> dict:
     return {
         "event": event,
         "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -62,4 +62,13 @@ async def fire_event(db: AsyncSession, event: str, data: dict) -> None:
     Uses asyncio.create_task(), so delivery is fire-and-forget - the HTTP call 
     happens in the background and the API route returns without waiting.
     """
-    pass
+    result = await db.execute(select(Webhook).where(Webhook.is_active.is_(True)))
+    webhooks: List[Webhook] = result.scalars().all()
+
+    payload = _build_payload(event, data)
+
+    for wh in webhooks:
+        if event in (wh.events or []):
+            # create_task schedules the coroutine on the running event loop
+            # without blocking the current request
+            asyncio.create_task(_deliver(wh, payload))
