@@ -89,3 +89,7 @@ async def create_webhook(
     await db.commit()
     await db.refresh()
     return wh
+
+
+async def get_all_webhooks(db: AsyncSession) -> List[Webhook]:
+    pass
