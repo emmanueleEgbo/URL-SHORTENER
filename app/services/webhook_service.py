@@ -107,3 +107,16 @@ async def delete_webhook(db: AsyncSession, webhook_id: int) -> bool:
     await db.delete(wh)
     await db.commit()
     return True
+
+
+async def test_webhook(wh: Webhook) -> dict:
+    """Send a synthetic test event to verify the endpoint is reachable."""
+    payload = _build_payload(
+        "webhook.test",
+        {"message": "Test event from your URL Shortener - connection verified!"}
+    )
+    try:
+        await _deliver(wh, payload)
+        return {"success": True, "message": f"Test payload sent to {wh.url}"}
+    except Exception as e:
+        return {"success": False, "message": str(e)}
