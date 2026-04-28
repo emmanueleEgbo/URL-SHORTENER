@@ -98,3 +98,12 @@ async def get_all_webhooks(db: AsyncSession) -> List[Webhook]:
 async def get_webhook_by_id(db: AsyncSession, webhook_id: int) -> Optional[Webhook]:
     result = await db.execute(select(Webhook).where(Webhook.id == webhook_id))
     return result.scalar_one_or_none()
+
+
+async def delete_webhook(db: AsyncSession, webhook_id: int) -> bool:
+    wh = await get_webhook_by_id(db, webhook_id)
+    if not wh:
+        return False
+    await db.delete(wh)
+    await db.commit()
+    return True
