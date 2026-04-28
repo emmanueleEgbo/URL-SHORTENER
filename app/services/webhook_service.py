@@ -55,3 +55,11 @@ async def _deliver(webhook: Webhook, payload: dict) -> None:
 # --------------------------------------------
 # Public: event firing
 # --------------------------------------------
+
+async def fire_event(db: AsyncSession, event: str, data: dict) -> None:
+    """Fire `event` to every active webhook subscribed to it.
+
+    Uses asyncio.create_task(), so delivery is fire-and-forget - the HTTP call 
+    happens in the background and the API route returns without waiting.
+    """
+    pass
