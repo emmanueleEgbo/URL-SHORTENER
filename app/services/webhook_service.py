@@ -50,3 +50,8 @@ async def _deliver(webhook: Webhook, payload: dict) -> None:
             logger.info("Webhook %s -> %s status=%s", webhook.id, webhook.url, response.status_code)
     except Exception as e:
         logger.error("Webhook %s deliver failed to %s: %s", webhook.id, webhook.url, e)
+
+
+# --------------------------------------------
+# Public: event firing
+# --------------------------------------------
