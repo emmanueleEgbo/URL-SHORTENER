@@ -94,3 +94,7 @@ async def create_webhook(
 async def get_all_webhooks(db: AsyncSession) -> List[Webhook]:
     result = await db.execute(select(Webhook))
     return result
+
+async def get_webhook_by_id(db: AsyncSession, webhook_id: int) -> Optional[Webhook]:
+    result = await db.execute(select(Webhook).where(Webhook.id == webhook_id))
+    return result.scalar_one_or_none()
