@@ -84,4 +84,8 @@ async def create_webhook(
     url: str,
     events: List[str],
 ) -> Webhook:
-    pass
+    wh = Webhook(name=name, url=url, events=events)
+    db.add(wh)
+    await db.commit()
+    await db.refresh()
+    return wh
