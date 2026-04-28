@@ -92,4 +92,5 @@ async def create_webhook(
 
 
 async def get_all_webhooks(db: AsyncSession) -> List[Webhook]:
-    pass
+    result = await db.execute(select(Webhook))
+    return result
