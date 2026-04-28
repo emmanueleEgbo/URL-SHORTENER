@@ -72,3 +72,16 @@ async def fire_event(db: AsyncSession, event: str, data: dict) -> None:
             # create_task schedules the coroutine on the running event loop
             # without blocking the current request
             asyncio.create_task(_deliver(wh, payload))
+
+
+# --------------------------------------------
+# Public: CRUD
+# --------------------------------------------
+
+async def create_webhook(
+    db: AsyncSession,
+    name: str,
+    url: str,
+    events: List[str],
+) -> Webhook:
+    pass
