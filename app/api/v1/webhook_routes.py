@@ -47,5 +47,8 @@ async def test_webhook(webhook_id: int, db: AsyncSession = Depends(get_db)):
     Use this right after registering a webhook to confirm it works
     before waiting for real event to fire.
     """
-    pass
+    wh = await webhook_service.get_webhook_by_id(db, webhook_id)
+    if not wh:
+        raise HTTPException(status_code=404, detail="webhook not found")
+    return await webhook_service.test_webhook(wh)
     
