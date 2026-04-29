@@ -23,4 +23,10 @@ async def register_webhook(body: WebhookCreate, db: AsyncSession = Depends(get_d
         url=body.url,
         events=[e.value for e in body.events],
     )
+
+
+@webhook_router.get("", response_model=List[WebhookResponse])
+async def list_webhooks(db: AsyncSession = Depends(get_db)):
+    """List all registered webhooks."""
+    return await webhook_service.get_all_webhooks(db)
     
