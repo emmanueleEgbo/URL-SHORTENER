@@ -1,3 +1,9 @@
+"""Entry point for the URL shortener application.
+
+Run with:
+    uvicorn app.main:app --reload
+"""
+
 from fastapi import FastAPI
 from app.api.v1.routes import v1_router
 #from app.core.database import engine, Base
