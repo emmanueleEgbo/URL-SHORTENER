@@ -42,5 +42,10 @@ async def remove_webhook(webhook_id: int, db: AsyncSession = Depends(get_db)):
 
 @webhook_router.post("/{webhook_id}/test")
 async def test_webhook(webhook_id: int, db: AsyncSession = Depends(get_db)):
+    """Send a synthetic test payload to verify your endpoint is reachable.
+
+    Use this right after registering a webhook to confirm it works
+    before waiting for real event to fire.
+    """
     pass
     
