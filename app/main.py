@@ -4,9 +4,10 @@ Run with:
     uvicorn app.main:app --reload
 """
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.api.v1.routes import v1_router
-#from app.core.database import engine, Base
+from app.api.v1.webhook_routes import webhook_router
 from app.core.async_database import async_engine, Base
 from app.core.cache_utilities import close_redis, init_redis
 from app.models.url_model import URL
