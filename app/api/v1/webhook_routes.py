@@ -29,4 +29,18 @@ async def register_webhook(body: WebhookCreate, db: AsyncSession = Depends(get_d
 async def list_webhooks(db: AsyncSession = Depends(get_db)):
     """List all registered webhooks."""
     return await webhook_service.get_all_webhooks(db)
+
+
+@webhook_router.delete("/{webhook_id}", status_code=204)
+async def remove_webhook(webhook_id: int, db: AsyncSession = Depends(get_db)):
+    """Delete a webhook registration."""
+    deleted = await webhook_service.delete_webhook(db, webhook_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Webhook not found")
+    return f"webhook with id: {webhook_id} was successfully deleted"
+
+
+@webhook_router.post("/{webhook_id}/test")
+async def test_webhook(webhook_id: int, db: AsyncSession = Depends(get_db)):
+    pass
     
