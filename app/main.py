@@ -15,6 +15,7 @@ import logging
 
 
 # Connect redis to our FastAPI app lifecycle so it can start and close properly authomatically
+@asynccontextmanager
 async def lifespan(app: FastAPI):
     async with async_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
@@ -25,14 +26,13 @@ async def lifespan(app: FastAPI):
     yield
     
     await close_redis()
-    logging.info("REDIS CLOSED")
-    
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(title="URL Shortener" ,lifespan=lifespan)
 
 
 # Include the routes
 app.include_router(v1_router)
+app.include_router(webhook_router)
 
 # Liveliness / health check endpoint
 @app.get("/")
