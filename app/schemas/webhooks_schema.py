@@ -13,7 +13,7 @@ class WebhookEvent(str, Enum):
 class WebhookCreate(BaseModel):
     name: str
     url: str
-    event: List[WebhookEvent]
+    events: List[WebhookEvent]
 
 
 class WebhookResponse(BaseModel):

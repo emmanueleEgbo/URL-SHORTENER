@@ -17,4 +17,10 @@ async def register_webhook(body: WebhookCreate, db: AsyncSession = Depends(get_d
     Tip: grab a free listener URL from https://webhook.site then paste it here.
     Your URL shortener will POST to that URL every time a subscribed event fires.
     """
-    pass
+    return await webhook_service.create_webhook(
+        db,
+        name=body.name,
+        url=body.url,
+        events=[e.value for e in body.events],
+    )
+    
