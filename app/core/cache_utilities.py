@@ -34,6 +34,8 @@ async def close_redis():
     global redis
     if redis:
         await redis.close()
+        redis = None
+    logger.info("Redis connection closed")
     
 
 async def get_cache(key: str):
