@@ -1,11 +1,12 @@
 import os
+import logging
 from redis.asyncio import Redis
 from app.core.config import settings
-import logging
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
-redis = None
+redis: Optional[Redis] = None
 
 async def init_redis():
     """Initialize Redis connection on app startup."""
@@ -19,6 +20,7 @@ async def init_redis():
         password=settings.redis_password,
         decode_responses=True,
         )
+        logger.info("Redis connection initialized")
 
         await redis.ping() # verify connection
         logging.info("REDIS CONNECTED")
