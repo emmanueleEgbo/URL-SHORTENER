@@ -3,6 +3,8 @@ from redis.asyncio import Redis
 from app.core.config import settings
 import logging
 
+logger = logging.getLogger(__name__)
+
 redis = None
 
 async def init_redis():
