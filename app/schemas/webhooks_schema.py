@@ -17,6 +17,16 @@ class WebhookCreate(BaseModel):
 
 
 class WebhookResponse(BaseModel):
+    """Response model representing a registered webhook configuration.
+
+    Attributes:
+        id: Unique identifier of the webhook.
+        name: Human-readable name assigned to the webhook.
+        url: The endpoint URL where events will be delivered.
+        events: List of event types that trigger this webhook.
+        is_active: Indicates whether the webhook is currently enabled.
+        created_at: Timestamp indicating when the webhook was created.
+    """
     id: int
     name: str
     url: str
