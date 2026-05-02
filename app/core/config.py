@@ -29,8 +29,10 @@ class Settings(BaseSettings):
     @property
     def celery_backend_url(self) -> str:
         return f"{self.redis_url}/{self.celery_backend_db}"
-
-
-
+    
+    @property
+    def sync_database_url(self) -> str:
+        """Celery workers need a sync driver - swap asyncpg with psycopg2."""
+        return self.database_url.replace(""postgressql+asyncpg, "postgresql+psycopg2")
 
 settings = Settings()
