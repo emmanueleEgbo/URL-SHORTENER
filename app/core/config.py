@@ -12,5 +12,7 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env")
 
+    # Celery uses separate Redis DBs to avoid key collisions with the URL cache
+
 
 settings = Settings()
