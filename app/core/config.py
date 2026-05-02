@@ -21,6 +21,10 @@ class Settings(BaseSettings):
     def redis_url(self) -> str:
         auth = f":{self.redis_password}@" if self.redis_password else ""
         return f"redis://{auth}{self.redis_host}:{self.redis_port}"
+    
+    @property
+    def celery_broker_url(self) -> str:
+        return f"{self.redis_url}/{self.celery_broker_db}"
 
 
 
