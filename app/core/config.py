@@ -25,7 +25,10 @@ class Settings(BaseSettings):
     @property
     def celery_broker_url(self) -> str:
         return f"{self.redis_url}/{self.celery_broker_db}"
-
+    
+    @property
+    def celery_backend_url(self) -> str:
+        return f"{self.redis_url}/{self.celery_backend_db}"
 
 
 
