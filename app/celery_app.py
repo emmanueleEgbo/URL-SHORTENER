@@ -9,7 +9,8 @@ def create_celery_app() -> Celery:
         broker=settings.celery_broker_url,
         backend=settings.celery_backend_url,
         include=[
-
+            "app.tasks.webhook_tasks",
+            "app.tasks.analytics_tasks",
         ],
     )
 
@@ -36,7 +37,7 @@ def create_celery_app() -> Celery:
             },
             "hourly-cleanup-expired-links": {
                 "tasks": "app.tasks.analytics_tasks.cleanup_expired_links",
-                "schedule": crontab(minute=0),         # every hour 
+                "schedule": crontab(minute=0),         # every hour on the hour
             },
         },
     )
