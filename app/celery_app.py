@@ -22,4 +22,8 @@ def create_celery_app() -> Celery:
         # the message goes to the queue rather than being lost.
         task_acks_late=True,
         worker_prefetch_multiplier=1,
+
+        result_expires=86_400,    # Discard results after 24 hours
+        task_track_started=True,  # Surfaces STARTED state in flower
+        
     )
