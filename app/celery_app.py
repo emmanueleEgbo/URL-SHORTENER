@@ -40,3 +40,8 @@ def create_celery_app() -> Celery:
             },
         },
     )
+
+    return app
+
+
+celery_app = create_celery_app()
