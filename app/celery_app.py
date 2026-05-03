@@ -29,10 +29,14 @@ def create_celery_app() -> Celery:
         timezone="UTC",
         enable_utc=True,
 
-        beat_schedule=[
+        beat_schedule={
             "daily_analytics-rollup": {
                 "task": "app.tasks.daily_analytics_rollup",
                 "schedule": crontab(hour=0, minute=0), # midnight UTC
             },
-        ]
+            "hourly-cleanup-expired-links": {
+                "tasks": "app.tasks.analytics_tasks.cleanup_expired_links",
+                "schedule": crontab(minute=0),         # every hour 
+            },
+        },
     )
