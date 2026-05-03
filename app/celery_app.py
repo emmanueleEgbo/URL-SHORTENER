@@ -17,4 +17,9 @@ def create_celery_app() -> Celery:
         task_serializer="json",
         result_serializer="json",
         accept_content=["json"],
+
+        # Acknowledge only after the task finishes - if the worker dies mid-task
+        # the message goes to the queue rather than being lost.
+        task_acks_late=True,
+        worker_prefetch_multiplier=1,
     )
