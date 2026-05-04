@@ -87,7 +87,7 @@ async def create_webhook(
     wh = Webhook(name=name, url=url, events=events)
     db.add(wh)
     await db.commit()
-    await db.refresh()
+    await db.refresh(wh)
     return wh
 
 
