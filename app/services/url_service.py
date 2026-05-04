@@ -28,7 +28,7 @@ def generate_short_code(length: int = 6) -> str:
     return "".join(random.choices(string.ascii_letters + string.digits, k=length))
 
 
-async def create_short_url_service(db: AsyncSession, long_url: str) -> URL:
+async def create_short_url_service(db: AsyncSession, long_url: str, title: Optional[str] = None) -> URL:
     """Create or return an existing short URL mapping.
     This function first checks whether the given `long_url` already exists
     in the database. If it does, the existing `URL` record is returned,
@@ -79,7 +79,7 @@ async def create_short_url_service(db: AsyncSession, long_url: str) -> URL:
     else:
         raise Exception("Failed to generate unique short code.")
 
-    new_url = URL(long_url=long_url, short_code=short_code)
+    new_url = URL(long_url=long_url, short_code=short_code, title=title)
     
     db.add(new_url)
     
