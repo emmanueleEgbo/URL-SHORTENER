@@ -21,4 +21,7 @@ def daily_analytics_rollup() -> None:
     aggregated click counts to a dedicated analytics table once a clicks
     column (or separate clicks model) is in place.
     """
-    pass
+    with get_sync_db as db:
+        total = db.query(URL).count()
+
+    logger.info("Daily analytics rollup: %d total short URLs in system", total)
