@@ -15,4 +15,9 @@ _SessionFactory = sessionmaker(bind=_engine, autocommit=False, autoflush=False)
 
 @contextmanager
 def get_sync_db():
-    pass
+    """Yield a sync SQLAlchemy session and close when done."""
+    db: Session = _SessionFactory()
+    try:
+        yield db
+    finally:
+        db.close()
