@@ -15,11 +15,7 @@ class URL(Base):
     """
 
     __tablename__="urls"
-    # primary key for the URL mapping
     id = Column(Integer, primary_key=True, index=True)
-
-    # Target URL that the short code will redirect to.
     long_url = Column(String, nullable=False, unique=True)
-
-    # Unique short code for quick lookup
     short_code = Column(String, unique=True, index=True)
+    title = Column(String, nullable=True)
