@@ -1,8 +1,7 @@
 """Business logic for creating and resolving shortened URLs.
 
-This module contains small service helpers used by the API layer. 
-It is kept framework-agnostic and operates on SQLAlchemy sessions
-and models only.
+All service functions are async and use SQLAlchemy's async ORM (asyncpg driver).
+Redis is used as a write-through cache for the redirect hot path.
 """
 
 import random
@@ -128,3 +127,17 @@ async def get_urls_service(db: AsyncSession):
     """
     result = await db.execute(select(URL))
     return result.scalars().all()
+
+
+async def delete_url_service(db: AsyncSession, short_code: str) -> bool:
+    result = await db.execute(select(URL).where(URL.short_code == short_code))
+
+    url = result.scalar_one_or_none()
+
+    if not url:
+        return False
+    
+    await db.delete(url)
+    await db.commit()
+
+    return True
