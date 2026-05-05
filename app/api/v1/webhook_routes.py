@@ -24,6 +24,8 @@ async def register_webhook(body: WebhookCreate, db: AsyncSession = Depends(get_d
         events=[e.value for e in body.events],
     )
 
+# https://webhook.site/7c3a5bcc-2b10-49fb-be98-df212d46dab8
+
 
 @webhook_router.get("", response_model=List[WebhookResponse])
 async def list_webhooks(db: AsyncSession = Depends(get_db)):
