@@ -14,3 +14,23 @@ from app.models.webhook import Webhook
 from app.tasks.db import get_sync_db
 
 logger = logging.getLogger(__name__)
+
+
+@celery_app.task(
+    bind=True,
+    name="app.tasks.webhook_celery_tasks.deliver_webhook",
+    max_retries=3,
+    # Only retry on network/timeout problems - HTTP 4xx/5xx are remote faults.
+    autoretry_for=(httpx.TimeoutException, httpx.RequestError),
+    retry_backoff=True,    # 1s -> 2s -> 4s between retries
+    retry_backoff_max=120, # cap at 2 minutes
+    retry_jitter=True,     # spread retries so bursts don't slam the endpoint
+)
+def deliver_webhook(self, webhook_id: int, payload: dict) -> None:
+    """POST `payload` to the webhook endpoint identified by `webhook_id`.
+
+    Args: 
+        webhook_id: Primary key of the Webhook row in the database.
+        payload: The JSON body built by webhook_service._built_payload().
+    """
+    pass
