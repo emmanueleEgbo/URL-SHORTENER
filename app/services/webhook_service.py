@@ -115,8 +115,19 @@ async def test_webhook(wh: Webhook) -> dict:
         "webhook.test",
         {"message": "Test event from your URL Shortener - connection verified!"}
     )
+    headers = {
+        "Content-Type": "application/json",
+        "X-Webhook-Event": payload["event"],
+        "User-Agent": "URLShortener-Webhook/1.0",
+    }
     try:
         await _deliver(wh, payload)
         return {"success": True, "message": f"Test payload sent to {wh.url}"}
     except Exception as e:
         return {"success": False, "message": str(e)}
+    # try:
+    #     async with httpx.AsyncClient(timeout=10.0) as client:
+    #         resp = await client.post(wh.url, json=payload, headers=headers)
+    #     return {"success": True, "message": f"Test payload sent to {wh.url} (status {resp.status_code})"}
+    # except Exception as exc:
+    #     return {"success": False, "message": str(exc)}
