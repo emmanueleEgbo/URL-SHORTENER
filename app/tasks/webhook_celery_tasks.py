@@ -33,4 +33,21 @@ def deliver_webhook(self, webhook_id: int, payload: dict) -> None:
         webhook_id: Primary key of the Webhook row in the database.
         payload: The JSON body built by webhook_service._built_payload().
     """
-    pass
+    with get_sync_db as db:
+        wh = db.query(Webhook).filter(Webhook.id == webhook_id).first()
+
+        if not wh or not wh.is_active:
+            logger.info("Webhook %s is missing or inactive - skipping", webhook_id)
+            return
+        
+        headers = {
+            "Content-Type": "application/json",
+            "X-Webhook-Event": payload["event"],
+            "User-Agent": "URLShortener-Webhook/1.0",
+        }
+
+        response = httpx.post(wh.url, json=payload, headers=headers, timeout=10.0)
+        logger.info(
+            "Webhook %s -> %s status=%s attempts=%s",
+            webhook_id, wh.url, response.status_code, self.request.retries + 1,
+        )
