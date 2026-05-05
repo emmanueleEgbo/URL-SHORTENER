@@ -11,7 +11,13 @@ from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.async_database import get_db
 from app.schemas.url_schema import URLCreate, URLResponse, PaginatedResponse
-from app.services.url_service import create_short_url_service, get_long_url_service, get_urls_service
+from app.services.url_service import (
+    create_short_url_service, 
+    get_long_url_service, 
+    get_urls_service,
+    delete_url_service,
+)
+from app.services import webhook_service
 from fastapi.responses import RedirectResponse
 from app.core.redis_decorator import cache_response, url_cache_key
 from app.models.url_model import URL
@@ -48,7 +54,14 @@ async def create_short_url(p: URLCreate, db: AsyncSession = Depends(get_db)) -> 
         Returns:
             URLResponse: The persisted URL record containing the `short_code` and `long_url`.
     """
-    url = await create_short_url_service(db, str(p.long_url))
+    url = await create_short_url_service(db, str(p.long_url),str(p.title))
+    
+    # Hook webhook
+    await webhook_service.fire_event(
+        db,
+        "url.created",
+        {"short_code": url.short_code, "long_url": url.long_url, "title": url.title},
+    )
     return url
 
 
