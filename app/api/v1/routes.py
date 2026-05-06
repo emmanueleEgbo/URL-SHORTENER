@@ -93,3 +93,8 @@ async def redirect_to_long_url(short_code: str, db: AsyncSession = Depends(get_d
     
     # Use Starlette's RedirectResponse to send the client to the original URL.
     return RedirectResponse(url=url.long_url)
+
+
+@v1_router.delete("/links/{short_code}", status_code=204)
+async def delete_short_url(short_code: str, db: AsyncSession = Depends(get_db)):
+    pass
