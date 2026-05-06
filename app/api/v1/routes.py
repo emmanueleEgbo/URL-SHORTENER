@@ -97,4 +97,18 @@ async def redirect_to_long_url(short_code: str, db: AsyncSession = Depends(get_d
 
 @v1_router.delete("/links/{short_code}", status_code=204)
 async def delete_short_url(short_code: str, db: AsyncSession = Depends(get_db)):
-    pass
+    """Delete the URL mapping for the given short code.
+
+    Also evicts the entry from Redis cache.
+
+    Args:
+        short_code: The short code to delete.
+        db: Async SQLAlchemy DB session dependency.
+
+    Raises:
+        HTTPException: 404 if the short code does not exist.
+    """
+    deleted = await delete_short_url(db, short_code)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="URL not found")
+    await webhook_service.fire_event(db, "url.deleted", {"short_code": short_code})
