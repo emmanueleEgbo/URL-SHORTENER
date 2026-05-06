@@ -108,7 +108,7 @@ async def delete_short_url(short_code: str, db: AsyncSession = Depends(get_db)):
     Raises:
         HTTPException: 404 if the short code does not exist.
     """
-    deleted = await delete_short_url(db, short_code)
+    deleted = await delete_url_service(db, short_code)
     if not deleted:
         raise HTTPException(status_code=404, detail="URL not found")
     await webhook_service.fire_event(db, "url.deleted", {"short_code": short_code})
