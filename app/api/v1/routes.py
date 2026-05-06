@@ -85,5 +85,11 @@ async def redirect_to_long_url(short_code: str, db: AsyncSession = Depends(get_d
     if url is None:
         raise HTTPException(status_code=404, detail="URL not found")
     
+    await webhook_service.fire_event(
+        db,
+        "url.clicked",
+        {"short_code": short_code, "long_url": url.long_url, "title": url.title},
+    )
+    
     # Use Starlette's RedirectResponse to send the client to the original URL.
     return RedirectResponse(url=url.long_url)
