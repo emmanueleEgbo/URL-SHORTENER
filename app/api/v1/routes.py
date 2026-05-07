@@ -25,7 +25,7 @@ from app.models.url_model import URL
 v1_router = APIRouter(prefix="/v1", tags=["v1"])
 
 
-@v1_router.get("/urls", response_model=PaginatedResponse)
+@v1_router.get("/links", response_model=PaginatedResponse)
 async def get_urls(db: AsyncSession = Depends(get_db)):
     """Retrieve all stored URLs.
 
@@ -65,7 +65,7 @@ async def create_short_url(p: URLCreate, db: AsyncSession = Depends(get_db)) -> 
     return url
 
 
-@v1_router.get("/{short_code}")
+@v1_router.get("/links/{short_code}")
 @cache_response(url_cache_key, ttl=300)
 async def redirect_to_long_url(short_code: str, db: AsyncSession = Depends(get_db)):
     """Redirect to the original long URL for the given short code.
