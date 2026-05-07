@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker, Session
 from app.core.config import settings
 
 
-_engine = create_engine(settings.sync_database_url, pool_pre_ping=True)
+_engine = create_engine(settings.sync_database_url, pool_pre_ping=True, pool_size=10)
 _SessionFactory = sessionmaker(bind=_engine, autocommit=False, autoflush=False)
 
 
