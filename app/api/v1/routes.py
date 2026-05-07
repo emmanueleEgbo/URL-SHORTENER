@@ -54,7 +54,7 @@ async def create_short_url(p: URLCreate, db: AsyncSession = Depends(get_db)) -> 
         Returns:
             URLResponse: The persisted URL record containing the `short_code` and `long_url`.
     """
-    url = await create_short_url_service(db, str(p.long_url),str(p.title))
+    url = await create_short_url_service(db, p.long_url, p.title)
     
     # Hook webhook
     await webhook_service.fire_event(
