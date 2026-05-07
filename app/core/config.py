@@ -33,6 +33,6 @@ class Settings(BaseSettings):
     @property
     def sync_database_url(self) -> str:
         """Celery workers need a sync driver - swap asyncpg with psycopg2."""
-        return self.database_url.replace("postgressql+asyncpg", "postgresql+psycopg2")
+        return self.database_url.replace("postgresql+asyncpg", "postgresql+psycopg2")
 
 settings = Settings()

@@ -9,9 +9,10 @@ from sqlalchemy.orm import sessionmaker, Session
 from app.core.config import settings
 
 
-_engine = create_engine(settings.sync_database_url, pool_pre_ping=True, pool_size=10)
+_engine = create_engine(settings.sync_database_url, pool_pre_ping=True)
 _SessionFactory = sessionmaker(bind=_engine, autocommit=False, autoflush=False)
 
+print("SYNC DB:", settings.sync_database_url)
 
 @contextmanager
 def get_sync_db():
