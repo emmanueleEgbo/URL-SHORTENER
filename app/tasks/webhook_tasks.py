@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 @celery_app.task(
     bind=True,
-    name="app.tasks.webhook_celery_tasks.deliver_webhook",
+    name="app.tasks.webhook_tasks.deliver_webhook",
     max_retries=3,
     # Only retry on network/timeout problems - HTTP 4xx/5xx are remote faults.
     autoretry_for=(httpx.TimeoutException, httpx.RequestError),
