@@ -10,16 +10,16 @@ How it works end-to-end:
      each target URL using asyncio.create_task() — so the delivery is completely
      non-blocking; the API response returns immediately.
 """
-import asyncio
+# import asyncio
 import logging
 from datetime import datetime, timezone
 from typing import List, Optional
 
-import httpx
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.webhook import Webhook
+from app.tasks.webhook_celery_tasks import deliver_webhook
 
 logger = logging.getLogger(__name__)
 
@@ -36,20 +36,20 @@ def _build_payload(event: str, data: dict) -> dict:
     }
 
 
-async def _deliver(webhook: Webhook, payload: dict) -> None:
-    """POST the payload to a single webhook URL. Errors are logged, never raised."""
-    headers = {
-        "Content-Type": "application/json",
-        "X-Webhook-Event": payload["event"],
-        "User-Agent": "URLShortener-Webhook/1.0",
-    }
+# async def _deliver(webhook: Webhook, payload: dict) -> None:
+#     """POST the payload to a single webhook URL. Errors are logged, never raised."""
+#     headers = {
+#         "Content-Type": "application/json",
+#         "X-Webhook-Event": payload["event"],
+#         "User-Agent": "URLShortener-Webhook/1.0",
+#     }
 
-    try:
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.post(webhook.url, json=payload, headers=headers)
-            logger.info("Webhook %s -> %s status=%s", webhook.id, webhook.url, response.status_code)
-    except Exception as e:
-        logger.error("Webhook %s deliver failed to %s: %s", webhook.id, webhook.url, e)
+#     try:
+#         async with httpx.AsyncClient(timeout=10.0) as client:
+#             response = await client.post(webhook.url, json=payload, headers=headers)
+#             logger.info("Webhook %s -> %s status=%s", webhook.id, webhook.url, response.status_code)
+#     except Exception as e:
+#         logger.error("Webhook %s deliver failed to %s: %s", webhook.id, webhook.url, e)
 
 
 # --------------------------------------------
@@ -71,7 +71,8 @@ async def fire_event(db: AsyncSession, event: str, data: dict) -> None:
         if event in (wh.events or []):
             # create_task schedules the coroutine on the running event loop
             # without blocking the current request
-            asyncio.create_task(_deliver(wh, payload))
+            # asyncio.create_task(_deliver(wh, payload)) Replaced with celery
+            deliver_webhook.delay(wh.id, payload)
 
 
 # --------------------------------------------
@@ -111,6 +112,7 @@ async def delete_webhook(db: AsyncSession, webhook_id: int) -> bool:
 
 async def test_webhook(wh: Webhook) -> dict:
     """Send a synthetic test event to verify the endpoint is reachable."""
+    import httpx
     payload = _build_payload(
         "webhook.test",
         {"message": "Test event from your URL Shortener - connection verified!"}
@@ -120,14 +122,17 @@ async def test_webhook(wh: Webhook) -> dict:
         "X-Webhook-Event": payload["event"],
         "User-Agent": "URLShortener-Webhook/1.0",
     }
-    try:
-        await _deliver(wh, payload)
-        return {"success": True, "message": f"Test payload sent to {wh.url}"}
-    except Exception as e:
-        return {"success": False, "message": str(e)}
+
     # try:
-    #     async with httpx.AsyncClient(timeout=10.0) as client:
-    #         resp = await client.post(wh.url, json=payload, headers=headers)
-    #     return {"success": True, "message": f"Test payload sent to {wh.url} (status {resp.status_code})"}
-    # except Exception as exc:
-    #     return {"success": False, "message": str(exc)}
+    #     await _deliver(wh, payload)
+
+    #     return {"success": True, "message": f"Test payload sent to {wh.url}"}
+    # except Exception as e:
+    #     return {"success": False, "message": str(e)}
+    
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            resp = await client.post(wh.url, json=payload, headers=headers)
+        return {"success": True, "message": f"Test payload sent to {wh.url} (status {resp.status_code})"}
+    except Exception as exc:
+        return {"success": False, "message": str(exc)}
