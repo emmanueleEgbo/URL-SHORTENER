@@ -19,7 +19,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.webhook import Webhook
-from app.tasks.webhook_celery_tasks import deliver_webhook
+from app.tasks.webhook_tasks import deliver_webhook
 
 logger = logging.getLogger(__name__)
 
