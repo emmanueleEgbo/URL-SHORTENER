@@ -53,7 +53,7 @@ async def create_short_url_service(db: AsyncSession, long_url: str, title: Optio
 
     # Check if long_url already exists and return it ensuring Indempotency
     result = await db.execute(select(URL).where(URL.long_url == long_url))
-    existing_long_url = result.scalar_one_or_none
+    existing_long_url = result.scalar_one_or_none()
 
     if existing_long_url:
         return existing_long_url # Return existing mapping immediately
