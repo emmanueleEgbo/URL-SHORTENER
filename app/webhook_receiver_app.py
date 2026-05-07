@@ -1,3 +1,5 @@
+"""A local webhook receiver app to use for testing webhook in place of webhook.site"""
+
 from fastapi import FastAPI, Request
 
 
