@@ -1,19 +1,19 @@
-# from datetime import datetime, timezone
-# from sqlalchemy import Boolean, Column, DateTime, Integer, JSON, String
-# from app.core.async_database import Base
+from datetime import datetime, timezone
+from sqlalchemy import Boolean, Column, DateTime, Integer, JSON, String
+from app.core.async_database import Base
 
 
-# class Webhook(Base):
-#     __tablename__="webhooks"
+class Webhook(Base):
+    __tablename__="webhooks"
 
-#     id = Column(Integer, primary_key=True, index=True)
-#     name = Column(String, nullable=True)
-#     url = Column(String, nullable=False)
-#     # e.g. ["url.created", "url.click", "url.deleted"]
-#     events = Column(JSON, nullable=False, default=list)
-#     is_active = Column(Boolean, default=True, nullable=False)
-#     created_at = Column(
-#         DateTime(timezone=True),
-#         default=lambda: datetime.now(timezone.utc),
-#         nullable=False,
-#     )
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=True)
+    url = Column(String, nullable=False)
+    # e.g. ["url.created", "url.click", "url.deleted"]
+    events = Column(JSON, nullable=False, default=list)
+    is_active = Column(Boolean, default=True, nullable=False)
+    created_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )
