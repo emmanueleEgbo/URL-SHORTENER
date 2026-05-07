@@ -33,7 +33,7 @@ def deliver_webhook(self, webhook_id: int, payload: dict) -> None:
         webhook_id: Primary key of the Webhook row in the database.
         payload: The JSON body built by webhook_service._built_payload().
     """
-    with get_sync_db as db:
+    with get_sync_db() as db:
         wh = db.query(Webhook).filter(Webhook.id == webhook_id).first()
 
         if not wh or not wh.is_active:
