@@ -27,6 +27,9 @@ def create_celery_app() -> Celery:
         result_expires=86_400,    # Discard results after 24 hours
         task_track_started=True,  # Surfaces STARTED state in flower
 
+        broker_connection_retry_on_startup=True,
+        
+
         timezone="UTC",
         enable_utc=True,
 
