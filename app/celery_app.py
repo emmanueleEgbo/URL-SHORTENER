@@ -28,7 +28,8 @@ def create_celery_app() -> Celery:
         task_track_started=True,  # Surfaces STARTED state in flower
 
         broker_connection_retry_on_startup=True,
-        
+        broker_connection_retry=True,
+        worker_cancel_long_running_tasks_on_connection_loss = True,
 
         timezone="UTC",
         enable_utc=True,
