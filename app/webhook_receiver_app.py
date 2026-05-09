@@ -5,7 +5,7 @@ from fastapi import FastAPI, Request
 
 app = FastAPI()
 
-@app.post("/webhook/receiver")
+@app.post("/webhook")
 async def receive_webhook(request: Request):
     """
     Receive incoming webhook events.
