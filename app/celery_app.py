@@ -1,3 +1,20 @@
+"""
+Celery application configuration.
+
+This module initializes the Celery app and configures the Redis broker
+and result backend for asynchronous background task processing.
+
+Windows note:
+Celery's default prefork pool is not fully supported on Windows.
+For local development on Windows, start the worker using the solo pool:
+
+    celery -A app.celery_app worker --pool=solo --loglevel=info
+
+Optional Flower monitoring dashboard:
+
+    celery -A app.celery_app flower
+"""
+
 from celery import Celery
 from celery.schedules import crontab
 from app.core.config import settings
