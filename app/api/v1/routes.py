@@ -10,8 +10,8 @@ Endpoints:
 - DELETE /v1/links/{short_code}  delete a short link
 """
 
-from fastapi import APIRouter, Depends, HTTPException
-from typing import List
+from fastapi import APIRouter, Depends, Header, HTTPException
+from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.async_database import get_db
 from app.schemas.url_schema import URLCreate, URLResponse, PaginatedResponse
