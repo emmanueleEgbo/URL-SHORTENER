@@ -32,10 +32,15 @@ v1_router = APIRouter(prefix="/v1", tags=["v1"])
 
 @v1_router.get("/links", response_model=PaginatedResponse)
 async def get_urls(db: AsyncSession = Depends(get_db)):
-    """Retrieve all stored URLs.
+    """Create a short URL code for a provided long URL.
+
+    Supports the Idempotency-Key header. Send the same UUID on retries and
+    the original response is returned without creating a duplicate record.
 
     Args:
-        db: SQLAlchemy asynchronous database session dependency.
+        p: Pydantic model containing the long_url to shorten.
+        db: Async SQLAlchemy DB session dependency.
+        idempotency_key: Optional client-generated UUID for safe retries.
 
     Returns:
         PaginatedResponse: A response object containing a list of URL instances,
