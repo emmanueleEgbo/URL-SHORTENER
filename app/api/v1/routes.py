@@ -72,6 +72,11 @@ async def create_short_url(
     Returns:
         URLResponse: The persisted URL record containing short_code and long_url.
     """
+    if idempotency_key:
+        cached = await get_idempotent_response(idempotency_key)
+        if cached:
+            return URLResponse(**cached)
+
     url = await create_short_url_service(db, str(p.long_url), p.title)
     
     # Hook webhook
