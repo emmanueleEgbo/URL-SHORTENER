@@ -79,12 +79,19 @@ async def create_short_url(
 
     url = await create_short_url_service(db, str(p.long_url), p.title)
     
-    # Hook webhook
+    # Hook in webhook
     await webhook_service.fire_event(
         db,
         "url.created",
         {"short_code": url.short_code, "long_url": url.long_url, "title": url.title},
     )
+
+    if idempotency_key:
+        await store_idempotent_response(
+            idempotency_key,
+            {"short_code": url.short_code, "long_code": url.long_url, "title": url.title},
+        )
+
     return url
 
 
