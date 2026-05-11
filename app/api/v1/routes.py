@@ -24,6 +24,7 @@ from app.services.url_service import (
 from app.services import webhook_service
 from fastapi.responses import RedirectResponse
 from app.core.redis_decorator import cache_response, url_cache_key
+from app.core.idempotency import get_idempotent_response, store_idempotent_response
 from app.models.url_model import URL
 
 v1_router = APIRouter(prefix="/v1", tags=["v1"])
