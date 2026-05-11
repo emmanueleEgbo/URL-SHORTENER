@@ -54,7 +54,11 @@ async def get_urls(db: AsyncSession = Depends(get_db)):
 
 
 @v1_router.post("/links", response_model=URLResponse)
-async def create_short_url(p: URLCreate, db: AsyncSession = Depends(get_db)) -> URLResponse:
+async def create_short_url(
+    p: URLCreate, 
+    db: AsyncSession = Depends(get_db),
+    idempotency_key: Optional[str] = Header(None, alias="Idempotency-Key"),
+) -> URLResponse:
     """Create a short URL code for a provided long URL.
 
     Args:
