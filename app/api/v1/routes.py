@@ -1,9 +1,13 @@
-"""FastAPI API for the URL shortener service.
+"""FastAPI API routes for the URL shortener service.
 
-Exposes three asynchronous endpoints:
--  POST /shorten: accepts a long URL and returns a generated short code with the original URL.
--  GET /{short_code}: Redirects the clients to the original long URL if the short code exists.
--  GET /urls: Retrieves a list of stored URL model instances, each including the short_code and long_url.
+All handlers are async. DB sessions are AsyncSession (asyncpg-backed).
+Redis is checked first on the redirect hot path before hitting the DB.
+
+Endpoints:
+- POST   /v1/links               create a short link
+- GET    /v1/links               list all stored links
+- GET    /v1/links/{short_code}  redirect to original URL (307)
+- DELETE /v1/links/{short_code}  delete a short link
 """
 
 from fastapi import APIRouter, Depends, HTTPException
