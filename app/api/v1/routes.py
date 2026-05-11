@@ -61,12 +61,16 @@ async def create_short_url(
 ) -> URLResponse:
     """Create a short URL code for a provided long URL.
 
-    Args:
-        p: Pydantic model containing the `long_url` to shorten.
-        db: SQLAlchemy DB session dependency.
+    Supports the Idempotency-Key header. Send the same UUID on retries and
+    the original response is returned without creating a duplicate record.
 
-        Returns:
-            URLResponse: The persisted URL record containing the `short_code` and `long_url`.
+    Args:
+        p: Pydantic model containing the long_url to shorten.
+        db: Async SQLAlchemy DB session dependency.
+        idempotency_key: Optional client-generated UUID for safe retries.
+
+    Returns:
+        URLResponse: The persisted URL record containing short_code and long_url.
     """
     url = await create_short_url_service(db, str(p.long_url), p.title)
     
