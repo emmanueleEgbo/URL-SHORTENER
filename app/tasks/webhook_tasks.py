@@ -74,9 +74,11 @@ def deliver_webhook(self, webhook_id: int, payload: dict) -> None:
             logger.info("Webhook %s is missing or inactive - skipping", webhook_id)
             return
         
+        attempt = self.request.retries + 1
+        
         headers = {
             "Content-Type": "application/json",
-            "X-Webhook-Event": payload["event"],
+            "X-Webhook-Event": payload.get("event", ""),
             "User-Agent": "URLShortener-Webhook/1.0",
         }
 
@@ -84,7 +86,15 @@ def deliver_webhook(self, webhook_id: int, payload: dict) -> None:
         try:
             response = httpx.post(wh.url, json=payload, headers=headers, timeout=10.0)
         except (httpx.TimeoutException, httpx.RequestError) as exc:
-            logger.warning()
+            logger.warning(
+                f"Webhook {webhook_id} network error "
+                f"attempt {attempt}/{_MAX_RETRIES + 1}: {exc}"
+            )
+            if self.request.retries >= _MAX_RETRIES:
+                _save_to_dlq(webhook_id, wh.url, payload, str(exc), attempt)
+                return
+            self.retry(exc=exc, countdown=_backoff(self.request.retries))
+            return  # never reached - self.retry() raises; keep linters happy
 
 
         logger.info(
