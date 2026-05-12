@@ -8,4 +8,5 @@ class DeadLetterWebhook(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     webhook_id = Column(Integer, nullable=False, index=True)
-    
+    webhook_url = Column(String(2048), nullable=False)
+    payload = Column(JSON, nullable=False)
