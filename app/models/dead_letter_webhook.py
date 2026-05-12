@@ -13,3 +13,5 @@ class DeadLetterWebhook(Base):
     failure_reason = Column(Text, nullable=True)
     attempt_count = Column(Integer, default=0)
     failed_at = Column(DateTime, default=datetime.now(datetime.timezone.utc), index=True)
+    is_resolved = Column(Boolean, default=False)
+    replayed_at = Column(DateTime, nullable=True)
