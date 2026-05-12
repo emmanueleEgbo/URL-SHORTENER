@@ -15,6 +15,18 @@ from app.tasks.db import get_sync_db
 
 logger = logging.getLogger(__name__)
 
+_MAX_RETRIES = 5
+
+
+def _save_to_dlq(
+    webhook_id: int,
+    webhook_url: str,
+    payload: dict,
+    failure_reason: str,
+    attempt_count: int,
+) -> None:
+    pass
+
 
 @celery_app.task(
     bind=True,
