@@ -45,7 +45,8 @@ def _save_to_dlq(
     )
 
 
-
+def _backoff(retries: int) -> float:
+    pass
 
 
 @celery_app.task(
