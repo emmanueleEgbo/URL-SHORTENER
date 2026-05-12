@@ -10,3 +10,6 @@ class DeadLetterWebhook(Base):
     webhook_id = Column(Integer, nullable=False, index=True)
     webhook_url = Column(String(2048), nullable=False)
     payload = Column(JSON, nullable=False)
+    failure_reason = Column(Text, nullable=True)
+    attempt_count = Column(Integer, default=0)
+    failed_at = Column(DateTime, default=datetime.now(datetime.timezone.utc), index=True)
