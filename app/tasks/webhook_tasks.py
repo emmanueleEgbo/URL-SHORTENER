@@ -46,8 +46,9 @@ def _save_to_dlq(
 
 
 def _backoff(retries: int) -> float:
-    pass
-
+    base_wait = 2 ** retries
+    jitter = random.uniform(0, base_wait)
+    return base_wait + jitter
 
 @celery_app.task(
     bind=True,
