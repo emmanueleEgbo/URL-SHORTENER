@@ -80,7 +80,12 @@ def deliver_webhook(self, webhook_id: int, payload: dict) -> None:
             "User-Agent": "URLShortener-Webhook/1.0",
         }
 
-        response = httpx.post(wh.url, json=payload, headers=headers, timeout=10.0)
+        # ----- Network / timeout -------------------------------------------------
+        try:
+            response = httpx.post(wh.url, json=payload, headers=headers, timeout=10.0)
+        except (httpx.TimeoutException, httpx.RequestError) as exc:
+            logger.warning()
+
 
         logger.info(
             "Webhook %s -> %s status=%s attempts=%s",
