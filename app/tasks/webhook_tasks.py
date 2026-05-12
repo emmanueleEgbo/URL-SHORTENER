@@ -8,7 +8,9 @@ Key improvements over the old approach:
 """
 
 import logging
+import random
 import httpx
+
 from app.celery_app import celery_app
 from app.models.webhook import Webhook
 from app.tasks.db import get_sync_db
@@ -25,7 +27,25 @@ def _save_to_dlq(
     failure_reason: str,
     attempt_count: int,
 ) -> None:
-    pass
+    """Write a permanently-failed delivery to the dead_letter_webhooks table."""
+    from app.models.dead_letter_webhook import DeadLetterWebhook
+
+    with get_sync_db() as db:
+        db.add(DeadLetterWebhook(
+            webhook_id=webhook_id,
+            webhook_url=webhook_url,
+            payload=payload,
+            failure_reason=failure_reason,
+            attempt_count=attempt_count
+        ))
+        db.commit()
+
+    logger.error(
+        f"DLQ: webhook_id={webhook_id}, url={webhook_url}, reason={failure_reason}, attempts={attempt_count}"
+    )
+
+
+
 
 
 @celery_app.task(
