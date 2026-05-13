@@ -47,3 +47,4 @@ class DLQEntryResponse(BaseModel):
     failure_reason: Optional[str] = None
     attempt_count: int
     failed_at: datetime
+    is_resolved: bool
