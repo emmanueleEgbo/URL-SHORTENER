@@ -48,3 +48,4 @@ class DLQEntryResponse(BaseModel):
     attempt_count: int
     failed_at: datetime
     is_resolved: bool
+    replayed_at: Optional[datetime] = None
