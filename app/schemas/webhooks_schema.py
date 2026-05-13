@@ -49,3 +49,6 @@ class DLQEntryResponse(BaseModel):
     failed_at: datetime
     is_resolved: bool
     replayed_at: Optional[datetime] = None
+
+    class Config:
+        from_attribute=True
