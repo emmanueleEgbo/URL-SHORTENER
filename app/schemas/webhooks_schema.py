@@ -45,3 +45,5 @@ class DLQEntryResponse(BaseModel):
     webhook_url: str
     payload: dict
     failure_reason: Optional[str] = None
+    attempt_count: int
+    
