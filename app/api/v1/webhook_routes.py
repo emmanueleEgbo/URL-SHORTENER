@@ -74,4 +74,9 @@ async def list_dead_letter_webhooks(
         .order_by(DeadLetterWebhook.failed_at.desc())
     )
     return result.scalars().all()
+
+
+@webhook_router.post("/dlq/{entry_id}/replay", status_code=202)
+async def replay_dead_letter_webhook(entry_id: int):
+    pass
     
