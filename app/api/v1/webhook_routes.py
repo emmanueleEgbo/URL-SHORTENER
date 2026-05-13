@@ -61,5 +61,10 @@ async def list_dead_letter_webhooks(
     resolved: bool = False,
     db: AsyncSession = Depends(get_db),
 ):
+    """List webhook deliveries that have exhausted all retries.
+
+    By default returns unresolved entries. Pass ?resolved=true to see
+    entries that have already been replayed successfully.
+    """
     pass
     
