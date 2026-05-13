@@ -41,3 +41,4 @@ class WebhookResponse(BaseModel):
 
 class DLQEntryResponse(BaseModel):
     id: int
+    webhook_id: int
