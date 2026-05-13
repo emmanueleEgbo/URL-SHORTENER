@@ -46,4 +46,4 @@ class DLQEntryResponse(BaseModel):
     payload: dict
     failure_reason: Optional[str] = None
     attempt_count: int
-    
+    failed_at: datetime
