@@ -1,9 +1,11 @@
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.async_database import get_db
+from app.models.dead_letter_webhook import DeadLetterWebhook
 from app.schemas.webhooks_schema import WebhookCreate, WebhookResponse
 from app.services import webhook_service
 from app.schemas.webhooks_schema import DLQEntryResponse
@@ -66,5 +68,10 @@ async def list_dead_letter_webhooks(
     By default returns unresolved entries. Pass ?resolved=true to see
     entries that have already been replayed successfully.
     """
-    pass
+    result = await db.execute(
+        select(DeadLetterWebhook)
+        .where(DeadLetterWebhook.is_resolved == resolved)
+        .order_by(DeadLetterWebhook.failed_at.desc())
+    )
+    return result.scalars().all()
     
