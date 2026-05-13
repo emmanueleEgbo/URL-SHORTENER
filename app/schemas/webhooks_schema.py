@@ -1,6 +1,6 @@
 from datetime import datetime
 from enum import Enum
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 
@@ -44,3 +44,4 @@ class DLQEntryResponse(BaseModel):
     webhook_id: int
     webhook_url: str
     payload: dict
+    failure_reason: Optional[str] = None
