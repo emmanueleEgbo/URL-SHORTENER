@@ -43,3 +43,4 @@ class DLQEntryResponse(BaseModel):
     id: int
     webhook_id: int
     webhook_url: str
+    payload: dict
