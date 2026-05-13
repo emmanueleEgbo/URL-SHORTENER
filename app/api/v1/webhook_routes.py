@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.async_database import get_db
 from app.schemas.webhooks_schema import WebhookCreate, WebhookResponse
 from app.services import webhook_service
+from app.schemas.webhooks_schema import DLQEntryResponse
 
 
 webhook_router = APIRouter(prefix="/v1/webhooks", tags=["webhooks"])
@@ -51,4 +52,14 @@ async def test_webhook(webhook_id: int, db: AsyncSession = Depends(get_db)):
     if not wh:
         raise HTTPException(status_code=404, detail="webhook not found")
     return await webhook_service.test_webhook(wh)
+
+
+# ------------ Dead Letter Queue -----------------------------------------
+
+@webhook_router.get("/dlq", response_model=List[DLQEntryResponse])
+async def list_dead_letter_webhooks(
+    resolved: bool = False,
+    db: AsyncSession = Depends(get_db),
+):
+    pass
     
