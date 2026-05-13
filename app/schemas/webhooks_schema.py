@@ -37,3 +37,7 @@ class WebhookResponse(BaseModel):
     class Config:
         # Allow creating this schema directly from ORM objects (e.g., SQLAlchemy models)
         from_attributes=True
+
+
+class DLQEntryResponse(BaseModel):
+    id: int
