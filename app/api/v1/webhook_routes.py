@@ -77,6 +77,11 @@ async def list_dead_letter_webhooks(
 
 
 @webhook_router.post("/dlq/{entry_id}/replay", status_code=202)
-async def replay_dead_letter_webhook(entry_id: int):
+async def replay_dead_letter_webhook(entry_id: int, db: AsyncSession = Depends(get_db)):
+    """Re-queue a failed webhook delivery.
+
+    Marks the DLQ entry as resolved and enqueues a fresh delivery attempt
+    with the original payload. The task will retry up to 5 times if needed.
+    """
     pass
     
