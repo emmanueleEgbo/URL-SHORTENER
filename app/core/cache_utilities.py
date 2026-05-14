@@ -39,6 +39,7 @@ async def close_redis():
 async def _get_redis() -> Redis:
     if redis is None:
         raise RuntimeError("Redis not initialized")
+    return redis
     
 
 async def get_cache(key: str):
