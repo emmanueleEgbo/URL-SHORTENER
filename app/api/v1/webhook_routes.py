@@ -107,4 +107,14 @@ async def replay_dead_letter_webhook(entry_id: int, db: AsyncSession = Depends(g
 
 @webhook_router.delete("/dlq/{entry_id}", status_code=204)
 async def delete_dead_letter_webhook(entry_id: int, db: AsyncSession = Depends(get_db)):
-    pass
+    """Permanently delete a DLQ entry."""
+    result = await db.execute(
+        select(DeadLetterWebhook).where(DeadLetterWebhook.id == entry_id)
+    )
+    entry = result.scalar_one_or_none()
+
+    if not entry:
+        raise HTTPException(status_code=404, detail="DLQ entry not found")
+    
+    await db.delete(entry)
+    await db.commit()
