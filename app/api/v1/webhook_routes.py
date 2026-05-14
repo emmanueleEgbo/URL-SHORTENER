@@ -86,4 +86,11 @@ async def replay_dead_letter_webhook(entry_id: int, db: AsyncSession = Depends(g
     result = await db.execute(
         select(DeadLetterWebhook).where(DeadLetterWebhook.id == entry_id)
     )
+    entry = result.scalar_one_or_none()
+
+    if not entry:
+        raise HTTPException(status_code=404, detail="DLQ entry not found")
+    
+    if entry.is_resolved:
+        raise HTTPException(status_code=409, detail="Entry has already been replayed")
     
