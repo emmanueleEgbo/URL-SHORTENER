@@ -51,10 +51,12 @@ async def get_cache(key: str):
     Returns:
         The cached value associated with the key, or None if the key
         does not exist in the cache.
+    
+    Raises:
+        Runtime error stating that redis is not initialized.
     """
-    if redis is None:
-        return None
-    return await redis.get(key)
+    r = await _get_redis()
+    return await r.get(key)
 
 
 async def set_cache(key: str, value: str, ttl: int = 300):
@@ -72,9 +74,8 @@ async def set_cache(key: str, value: str, ttl: int = 300):
     Returns:
         None
     """
-    if redis is None:
-        return
-    await redis.set(key, value, ex=ttl)
+    r = _get_redis()
+    await r.set(key, value, ex=ttl)
 
 
 async def delete_cache(key: str):
