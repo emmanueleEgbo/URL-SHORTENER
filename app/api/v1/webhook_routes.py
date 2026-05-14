@@ -83,5 +83,7 @@ async def replay_dead_letter_webhook(entry_id: int, db: AsyncSession = Depends(g
     Marks the DLQ entry as resolved and enqueues a fresh delivery attempt
     with the original payload. The task will retry up to 5 times if needed.
     """
-    pass
+    result = await db.execute(
+        select(DeadLetterWebhook).where(DeadLetterWebhook.id == entry_id)
+    )
     
