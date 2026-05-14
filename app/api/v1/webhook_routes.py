@@ -100,3 +100,6 @@ async def replay_dead_letter_webhook(entry_id: int, db: AsyncSession = Depends(g
 
     entry.is_resolved = True
     entry.replayed_at = datetime.now(timezone.utc)    # creates a timezone-aware UTC datetime
+    await db.commit()
+
+    return {"queued": True, "entry_id": entry_id, "webhook_id": entry.webhook_id}
