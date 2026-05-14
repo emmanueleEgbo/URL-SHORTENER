@@ -103,3 +103,8 @@ async def replay_dead_letter_webhook(entry_id: int, db: AsyncSession = Depends(g
     await db.commit()
 
     return {"queued": True, "entry_id": entry_id, "webhook_id": entry.webhook_id}
+
+
+@webhook_router.delete("/dlq/{entry_id}", status_code=204)
+async def delete_dead_letter_webhook(entry_id: int, db: AsyncSession = Depends(get_db)):
+    pass
