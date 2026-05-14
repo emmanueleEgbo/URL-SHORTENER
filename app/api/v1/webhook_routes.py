@@ -1,4 +1,5 @@
 from typing import List
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
@@ -96,4 +97,6 @@ async def replay_dead_letter_webhook(entry_id: int, db: AsyncSession = Depends(g
     
     from app.tasks.webhook_tasks import deliver_webhook
     deliver_webhook.delay(entry.webhook_id, entry.payload)
-    
+
+    entry.is_resolved = True
+    entry.replayed_at = datetime.now(timezone.utc)    # creates a timezone-aware UTC datetime
