@@ -94,3 +94,6 @@ async def replay_dead_letter_webhook(entry_id: int, db: AsyncSession = Depends(g
     if entry.is_resolved:
         raise HTTPException(status_code=409, detail="Entry has already been replayed")
     
+    from app.tasks.webhook_tasks import deliver_webhook
+    deliver_webhook.delay(entry.webhook_id, entry.payload)
+    
