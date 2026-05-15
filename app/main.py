@@ -37,4 +37,4 @@ app.include_router(webhook_router)
 # Liveliness / health check endpoint
 @app.get("/")
 def root():
-    return {"status": "ok", "message": "URL shortener is running"}
+    return {"status": "App is live and running"}
