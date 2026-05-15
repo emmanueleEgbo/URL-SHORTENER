@@ -17,8 +17,7 @@ class WebhookCreate(BaseModel):
 
 
 class WebhookResponse(BaseModel):
-    """Response model representing a registered webhook configuration.
-    """
+    
     id: int
     name: str
     url: str
